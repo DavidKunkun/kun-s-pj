@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-4.2.xsd
+	">
+
+
+   <context:property-placeholder location="classpath:db.properties"/>
+   
+   <!-- 数据源 -->
+	<bean id="dataSource123" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver}"></property>
+		<property name="url" value="${jdbc.url}"></property>
+		<property name="username" value="${jdbc.username}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+		
+	</bean>
+	
+	<!-- 因为需要SqlSession，所以得有SqlSessionFactory -->
+	<bean id="SqlSessionFactory123" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource123"></property>
+		<property name="configLocation" value="classpath:mybatis/SqlMapConfig.xml"></property>
+	</bean>
+	<!-- mapper.xml -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.kun.foodsafety.dao"></property><!-- 告诉他mapper.xml文件的位置 -->
+		<property name="SqlSessionFactoryBeanName" value="SqlSessionFactory123"></property>
+	</bean>
+	
+            			
+</beans>

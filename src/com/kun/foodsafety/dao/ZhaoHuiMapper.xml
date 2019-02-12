@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+	<mapper namespace="com.kun.foodsafety.dao.ZhaoHuiMapper">
+	    <insert id="addZhaoHui" parameterType="ZhaoHui">
+	       INSERT INTO zhaohui 
+	       (zhfId,zhfName,zhfcId,zhfcName,
+	       zhsId,zhsName,zhReason,zhTime,zhOperatorId)
+	       VALUES 
+	       (#{zhfId},#{zhfName},#{zhfcId},#{zhfcName},
+	       #{zhsId},#{zhsName},#{zhReason},#{zhTime},#{zhOperatorId})
+	    </insert>
+	    
+	    
+	    <resultMap type="Common" id="selAllZhaoHuiFoodMap">
+	       <id column="zhId" property=""/>
+	       <result column="zhsId" property="zhsId"/>
+	    </resultMap>
+	    <select id="selAllZhaoHuiFoodByPage" parameterType="Common" resultType="Common">
+	        select * from 
+	        zhaohui z,food f,company c,store s 
+	        where 
+	        z.zhfId=f.fId and c.cId=f.fCompanyId and s.sId=z.zhsId 
+	        ORDER BY zhId DESC LIMIT #{page.start},#{page.pageRow}
+	    </select>
+	    
+	    <select id="selCountZhaoHui" resultType="int">
+	       SELECT COUNT(zhId) FROM zhaohui
+	    </select>
+	    <select id="selZhaoHuiFoodByPage" parameterType="Page" resultType="ZhaoHui">
+	      select * from zhaohui ORDER BY zhId DESC LIMIT #{start},#{pageRow}
+	    </select>
+	  </mapper>

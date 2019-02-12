@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kun.foodsafety.dao.FoodMapper">
+        <insert id="addFood" parameterType="Food">
+	       INSERT INTO food 
+	       (fName,fTypeId,fBirthtime,fEndtime,fCompanyId,fZhuangTai,fShengChanPiCiId,fImage,fInfoEmployeeId) 
+	       VALUES
+	       (#{fName},#{fTypeId},#{fBirthtime},#{fEndtime},#{fCompanyId},#{fZhuangTai},#{fShengChanPiCiId},#{fImage},#{fInfoEmployeeId})
+	    </insert>
+	    
+	    <select id="selFoodTypeName" resultType="FoodType">
+	      SELECT SUBSTRING(ftId,1,2) AS ftId,ftName FROM foodtype GROUP BY SUBSTRING(ftId,1,2)
+	    </select>
+	    <select id="selOneFoodById" parameterType="int" resultType="food">
+	      select * from food where fId=#{fId}
+	   </select>
+        <select id="selCountFood" resultType="int">
+	       SELECT COUNT(fId) FROM food
+	   </select>
+        <select id="selFoodByPage" parameterType="Page" resultType="Food">
+	       SELECT * FROM food ORDER BY fId DESC LIMIT #{start},#{pageRow}
+	   </select>
+        <select id="selAllFoodType" resultType="FoodType">
+           SELECT * FROM foodtype
+        </select>
+        <select id="selFoodCountBycId" parameterType="int" resultType="int">
+           SELECT COUNT(fId) FROM food WHERE fCompanyId=#{cId} 
+        </select>
+        <select id="selAllFoodBycIdAndPage" parameterType="Common" resultType="food">
+           SELECT * FROM food WHERE fCompanyId=#{company.cId} LIMIT #{page.start},#{page.pageRow}
+        </select>
+        <select id="selAllFood" resultType="Food">
+           SELECT * FROM food 
+        </select>
+        <select id="selFoodDuoTiaoJian" parameterType="Food" resultType="Food">
+           select * from food where 1=1
+           <if test=" fName!='' and fName!=null ">
+                 and fName like '%${fName}%'
+           </if>
+           <if test=" fShengChanPiCiId!=0 and fShengChanPiCiId!=null">
+                 and fShengChanPiCiId=#{fShengChanPiCiId}
+           </if>
+           <if test=" fCompanyId!=0 and fCompanyId!=null">
+                 and fCompanyId=#{fCompanyId}
+           </if>
+           <if test=" fZhunRu!='' and fZhunRu!=null">
+                 and fZhunRu=#{fZhunRu}
+           </if>
+        </select>
+        
+        <update id="updateFoodByfId" parameterType="food">
+	      UPDATE food SET 
+	      fName=#{fName},fTypeId=#{fTypeId},fBirthtime=#{fBirthtime},fEndtime=#{fEndtime},fCompanyId=#{fCompanyId},fZhuangTai=#{fZhuangTai},fShengChanPiCiId=#{fShengChanPiCiId}
+	       WHERE fId=#{fId}
+	   </update>
+	   <update id="updateFoodZRByfId" parameterType="food">
+          UPDATE food SET fZhunRu=#{fZhunRu},fShengChanPiCiId=#{fShengChanPiCiId} WHERE fId=#{fId}
+       </update>
+	   
+	   
+	   <!-- 批量删除 -->
+	   <delete id="delMoreThanOneFood" parameterType="food">
+		      delete from food where
+		      <foreach collection="fId_list" item="fId" separator="or">
+		            fId=#{fId}
+		      </foreach>
+		</delete>
+</mapper>

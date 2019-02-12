@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+	<mapper namespace="com.kun.foodsafety.dao.LoginorMapper">
+	    <insert id="addLoginor" parameterType="Loginor">
+	       INSERT INTO login (uEmployeeId,uTime,uOuttime) 
+	       VALUES (#{uEmployeeId},#{uTime},#{uTime})
+	    </insert>
+	    
+	    <select id="selLastLoginTimeById" parameterType="Loginor"  resultType="String">
+	    SELECT MAX(uTime) FROM login WHERE uEmployeeId = #{uEmployeeId} AND uTime &lt; #{uTime} 
+	    </select> 
+	    
+	    <!-- <select id="selLastLoginTimeById" parameterType="Loginor"  resultType="String">
+	       SELECT MAX(uTime) FROM login 
+	         <where>
+	              and uEmployeeId = #{uEmployeeId} 
+	            <if test=" uTime !='' and uTime !=null ">
+	              AND uTime &lt; #{uTime} 
+	            </if>
+	        </where>
+	    </select> -->
+	     
+	</mapper>
+	

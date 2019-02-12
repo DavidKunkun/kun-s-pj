@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+	<mapper namespace="com.kun.foodsafety.dao.OperatorMapper">
+	    <insert id="addOperator" parameterType="Operator">
+	       insert into operator
+	           (oName,oPassword,oAge,oSex,oPhone,oAddress,oRight,oBuMen) 
+	       VALUES
+	           (#{oName},#{oPassword},#{oAge},#{oSex},#{oPhone},#{oAddress},#{oRight},#{oBuMen})
+	    </insert>
+	    <select id="selAllProvince" resultType="Provinces">
+	        SELECT * FROM provinces
+	    </select>
+	    <select id="selCityByPcode" parameterType="String" resultType="Cities">
+	        select * from cities where provinceid = #{pcode}
+	    </select>
+	   <select id="selAllOperator" resultType="operator">
+	       select * from operator
+	   </select>
+	   <select id="selOperatorByPage" parameterType="Page" resultType="operator">
+	       SELECT * FROM operator ORDER BY oId DESC LIMIT #{start},#{pageRow}
+	   </select>
+	   <select id="selOneOperatorById" parameterType="int" resultType="operator">
+	      select * from operator where oId=#{oId}
+	   </select>
+	   
+	   <update id="upOperatorByoId" parameterType="Operator">
+	      UPDATE operator SET 
+	      oName=#{oName},oPassword=#{oPassword},oAge=#{oAge},oSex=#{oSex},oPhone=#{oPhone},oAddress=#{oAddress},oRight=#{oRight},oBuMen=#{oBuMen}
+	       WHERE oId=#{oId}
+	   </update>
+	   
+	   
+	   <!-- 批量删除 -->
+	   <delete id="delMoreThanOneOperator" parameterType="Operator">
+		      delete from operator where
+		      <foreach collection="oId_list" item="oId" separator="or">
+		            oId=#{oId}
+		      </foreach>
+		</delete>
+	</mapper>
+	

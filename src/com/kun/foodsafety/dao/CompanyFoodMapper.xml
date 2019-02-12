@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kun.foodsafety.dao.CompanyFoodMapper">
+            <insert id="addCompanyFood" parameterType="CompanyFood">
+                INSERT INTO companyfood 
+                (cId,fId,cfStarttime) VALUES
+                (#{cId},#{fId},#{cfStarttime})
+            </insert>
+            
+            <resultMap type="Common" id="selAllCFMap">
+            
+            </resultMap>
+            
+            <select id="selAllCF" resultMap="selAllCFMap">
+     select * from food f,company c,companyfood cf where f.fCompanyId=c.cId and f.fId=cf.fId ORDER BY cf.cfId
+            </select>
+            <select id="selCompanyFoodByPage" parameterType="Page" resultType="CompanyFood">
+                 SELECT * FROM companyfood ORDER BY cfId DESC LIMIT #{start},#{pageRow}
+            </select>
+            <select id="selOneCompanyFoodByfId" parameterType="int" resultType="companyfood">
+	             select * from companyfood where fId=#{fId}
+	        </select>
+            <select id="selCountCompanyFood" resultType="int">
+	             SELECT COUNT(cfId) FROM companyfood
+	        </select>
+            <select id="selAllCompanyFood" resultType="CompanyFood">
+                 SELECT * FROM companyfood
+            </select>
+            
+            <update id="updateCompanyFoodXJAndTime" parameterType="CompanyFood">
+                UPDATE companyfood SET 
+                cfEndtime=#{cfEndtime},cfResult=#{cfResult},cfXiangXiJianCe=#{cfXiangXiJianCe},cfOperatorId=#{cfOperatorId} 
+                WHERE fId=#{fId}
+            </update>
+
+
+
+
+
+</mapper>

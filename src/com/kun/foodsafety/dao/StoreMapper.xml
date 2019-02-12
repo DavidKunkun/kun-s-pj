@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+	<mapper namespace="com.kun.foodsafety.dao.StoreMapper">
+	    <insert id="addStore" parameterType="Store">
+	       INSERT INTO store 
+	       (sName,sEntity,sPhone,sAddress,sJingYingNeiRong,sZhuangTai) 
+	       VALUES
+	       (#{sName},#{sEntity},#{sPhone},#{sAddress},#{sJingYingNeiRong},#{sZhuangTai})
+	    </insert>
+	    
+	    <delete id="delMoreThanOneStore" parameterType="store">
+		      delete from store where
+		      <foreach collection="sId_list" item="sId" separator="or">
+		            sId=#{sId}
+		      </foreach>
+	    </delete>
+	    
+	    <select id="selAllStore" resultType="store">
+	       select * from store
+	    </select>
+	    <select id="selStoreByPage" parameterType="page" resultType="store">
+	       SELECT * FROM store ORDER BY sId DESC LIMIT #{start},#{pageRow}
+	    </select>
+	    <select id="selCountStore" resultType="int">
+	       SELECT COUNT(sId) FROM store
+	    </select>
+	    <select id="selOneStoreBysId" parameterType="int" resultType="store">
+	       select * from store where sId=#{sId}
+	    </select>
+	    <select id="selStoreDuoTiaoJian" parameterType="Store" resultType="Store">
+            SELECT * FROM store where 1=1
+            <if test=" sName!='' and sName!=null ">
+                 and sName like '%${sName}%'
+           </if>
+           <if test=" sId!=0 and sId!=null">
+                 and sId=#{sId}
+           </if>
+           
+        </select>
+	    
+	    <update id="updateStoreBysId" parameterType="store">
+	         UPDATE store SET 
+	      sName=#{sName},sEntity=#{sEntity},sPhone=#{sPhone},sAddress=#{sAddress},sJingYingNeiRong=#{sJingYingNeiRong},sZhuangTai=#{sZhuangTai} 
+	      WHERE sId=#{sId}
+	    </update>
+	    <update id="updateStoreXCNumberBysId" parameterType="store">
+	         UPDATE store SET 
+	      sXunChaNumber=#{sXunChaNumber} ,sNotHeGe=#{sNotHeGe} ,sZhuangTai=#{sZhuangTai}
+	      WHERE sId=#{sId}
+	    </update>
+	    
+	
+	</mapper>

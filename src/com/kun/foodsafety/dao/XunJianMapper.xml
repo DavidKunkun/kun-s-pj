@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+	<mapper namespace="com.kun.foodsafety.dao.XunJianMapper">
+	    <insert id="addXunJian" parameterType="XunJian">
+	       INSERT INTO xunjian 
+	         (sId,fId,xjJingYing,xjWeiSheng,xjBaoZhuang,
+	          xjOverTime,xjFalse,xjResult,xjInstitution,xjOperatorId,
+	          xjBeiZhu,xjsName,xjfShengChanPiCi,xcStartTime,xjEndTime,xjBuHeGeReason) 
+	       VALUES
+	         (#{sId},#{fId},#{xjJingYing},#{xjWeiSheng},#{xjBaoZhuang},
+	         #{xjOverTime},#{xjFalse},#{xjResult},#{xjInstitution},#{xjOperatorId},
+	         #{xjBeiZhu},#{xjsName},#{xjfShengChanPiCi},#{xcStartTime},#{xjEndTime},#{xjBuHeGeReason})
+	    </insert>
+	    
+	    <delete id="delMoreThanOneXunJian" parameterType="XunJian">
+		      delete from xunjian where
+		      <foreach collection="xjId_list" item="xjId" separator="or">
+		            xjId=#{xjId}
+		      </foreach>
+	    </delete>
+	    
+	    <select id="selAllXunJian" resultType="XunJian">
+	       select * from xunjian ORDER BY xjId DESC
+	    </select>
+	    <select id="selXunJianByPage" parameterType="page" resultType="XunJian">
+	       SELECT * FROM xunjian ORDER BY xjId DESC LIMIT #{start},#{pageRow}
+	    </select>
+	    <select id="selCountXunJian" resultType="int">
+	       SELECT COUNT(xjId) FROM xunjian
+	    </select>
+	    <select id="selOneXunJianByxjId" parameterType="int" resultType="XunJian">
+	       select * from xunjian where xjId=#{xjId}
+	    </select>
+	    
+	    <update id="updateXunJianByxjId" parameterType="XunJian">
+	         UPDATE xunjian SET 
+	          
+	         WHERE xjId=#{xjId}
+	    </update>
+	
+	</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+	<mapper namespace="com.kun.foodsafety.dao.ZhiJianMapper">
+	    <insert id="addZhiJian" parameterType="ZhiJian">
+	       INSERT INTO zhijian 
+             (cId,zjfGuiGe,fId,zjfName,zjGanGuanShi,zjGanGuanResult,
+              zjYIngYangShi,zjYIngYangResult,zjWeiLiangShi,zjWeiLiangResult,
+              zjWeiShengWuShi,zjWeiShengWuResult,zjTianJiaJiShi,zjTianJiaJiResult,
+              zjDuXingShi,zjDuXingResult,
+              zjInstitution,zjResult,zjBeiZhu,zjEmployeerId,zjRefuseReason) 
+           VALUES 
+             (#{cId},#{zjfGuiGe},#{fId},#{zjfName},#{zjGanGuanShi},#{zjGanGuanResult},
+              #{zjYIngYangShi},#{zjYIngYangResult},#{zjWeiLiangShi},#{zjWeiLiangResult},
+              #{zjWeiShengWuShi},#{zjWeiShengWuResult},#{zjTianJiaJiShi},#{zjTianJiaJiResult},
+              #{zjDuXingShi},#{zjDuXingResult},
+              #{zjInstitution},#{zjResult},#{zjBeiZhu},#{zjEmployeerId},#{zjRefuseReason})
+	    </insert>
+	    
+	    <delete id="delMoreThanOneZhiJian" parameterType="ZhiJian">
+		      delete from zhijian where
+		      <foreach collection="zjId_list" item="zjId" separator="or">
+		            zjId=#{zjId}
+		      </foreach>
+	    </delete>
+	    
+	    <select id="selAllZhiJian" resultType="ZhiJian">
+	       select * from zhijian ORDER BY zjId DESC
+	    </select>
+	    <select id="selZhiJianByPage" parameterType="page" resultType="ZhiJian">
+	       SELECT * FROM zhijian ORDER BY zjId DESC LIMIT #{start},#{pageRow}
+	    </select>
+	    <select id="selCountZhiJian" resultType="int">
+	       SELECT COUNT(zjId) FROM zhijian
+	    </select>
+	    <select id="selOneZhiJianByfId" parameterType="int" resultType="ZhiJian">
+	       select * from zhijian where fId=#{fId}
+	    </select>
+	    
+	    <!-- <update id="updateZhiJianByzjId" parameterType="ZhiJian">
+	         UPDATE zhijian SET 
+	          #{cId},#{zjfGuiGe},#{fId},#{zjfName},#{zjGanGuanShi},#{zjGanGuanResult},
+	          #{zjYIngYangShi},#{zjYIngYangResult},#{zjWeiLiangShi},#{zjWeiLiangResult},
+              #{zjWeiShengWuShi},#{zjWeiShengWuResult},#{zjTianJiaJiShi},#{zjTianJiaJiResult},
+              #{zjDuXingShi},#{zjDuXingResult},
+              #{zjInstitution},#{zjResult},#{zjBeiZhu},#{zjEmployeerId},#{zjRefuseReason} 
+	         WHERE zjId=#{zjId}
+	    </update> -->
+	
+	</mapper>

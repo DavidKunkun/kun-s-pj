@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kun.foodsafety.dao.CompanyMapper">
+        <insert id="addCompany" parameterType="Company">
+	       INSERT INTO company 
+	       (cName,cEntity,cPhone,cIndustry,cZhuCeMoney,cZhuangtai,cMainChanPin,cAddress,cChuangLiTime,cPeople) 
+	       VALUES 
+	       (#{cName},#{cEntity},#{cPhone},#{cIndustry},#{cZhuCeMoney},#{cZhuangtai},#{cMainChanPin},#{cAddress},#{cChuangLiTime},#{cPeople})
+	    </insert>
+	    
+	    <select id="selOneCompanyById" parameterType="int" resultType="company">
+	      select * from company where cId=#{cId}
+	   </select>
+        <select id="selCountCompany" resultType="int">
+	       SELECT COUNT(cId) FROM company
+	   </select>
+        <select id="selCompanyByPage" parameterType="Page" resultType="Company">
+	       SELECT * FROM company ORDER BY cId DESC LIMIT #{start},#{pageRow}
+	   </select>
+        <select id="selAllCompany" resultType="Company">
+            SELECT * FROM company
+        </select>
+        <select id="selCompanyDuoTiaoJian" parameterType="Company" resultType="Company">
+            SELECT * FROM company where 1=1
+            <if test=" cName!='' and cName!=null ">
+                 and cName like '%${cName}%'
+           </if>
+           <if test=" cId!=0 and cId!=null">
+                 and cId=#{cId}
+           </if>
+           
+        </select>
+        
+        <update id="updateCompanyBycId" parameterType="Company">
+	      UPDATE company SET 
+	      cName=#{cName},cEntity=#{cEntity},cPhone=#{cPhone},cIndustry=#{cIndustry},
+	      cZhuCeMoney=#{cZhuCeMoney},cZhuangtai=#{cZhuangtai},cMainChanPin=#{cMainChanPin},
+	      cAddress=#{cAddress},cChuangLiTime=#{cChuangLiTime},cPeople=#{cPeople}
+	       WHERE cId=#{cId}
+	   </update>
+	   
+	   
+	   <!-- 批量删除 -->
+	   <delete id="delMoreThanOneCompany" parameterType="Company">
+		      delete from company where
+		      <foreach collection="cId_list" item="cId" separator="or">
+		            cId=#{cId}
+		      </foreach>
+		</delete>
+</mapper>
